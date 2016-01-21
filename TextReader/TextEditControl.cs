@@ -348,7 +348,7 @@ namespace Baybak.TextReader
           }
 
           x = leftMargin + _widths[n++];
-          g.DrawString(word, this.Font, brush, x, y, _stringFormat);
+          g.DrawString(word, _font, brush, x, y, _stringFormat);
          // g.DrawLine(Pens.Gray, x, y, x, y + _lineHeight);
         }
       }
