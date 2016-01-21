@@ -1,0 +1,24 @@
+﻿<DOCTYPE html>
+<html>
+  <head></head>
+<body>
+  
+    <table style="width:100%;cursor:pointer;">
+      <tr>
+        <th>Author</th>
+        <th>Title</th>
+        <th>Comment</th>
+        <th>File</th>
+      </tr>
+      $
+      <tr>
+        <td>@Author</td>
+        <td>@Title</td>
+        <td>@Comment</td>
+        <td onclick="window.external._openFile(this.innerText)">@File</td>
+        <td onclick="window.external._editFileInfo('@File')">Edit</td>
+      </tr>
+      $
+    </table>
+</body>
+</html>

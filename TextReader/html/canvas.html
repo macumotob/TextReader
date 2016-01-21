@@ -1,0 +1,530 @@
+﻿<?xml version="1.0" encoding="windows-1251" ?>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.1//EN" "xhtml11.dtd">
+<html>
+
+
+<head>
+
+
+  <meta charset="utf-8" />
+  <!--
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1251" />  
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+-->
+  <title>maxbuk</title>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: black;
+width:100%;
+height:100%;
+    }
+
+    td {
+      color: whitesmoke;
+    }
+
+    canvas {
+      left: 0px;
+      top: 0px;
+width:100%;
+height:100%;
+      
+      cursor: pointer;
+    }
+
+    #overlay {
+      visibility: hidden;
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      z-index: 1000;
+    }
+
+      #overlay div {
+        width: 300px;
+        margin: 100px auto;
+        background-color: #fff;
+        border: 1px solid #000;
+        padding: 15px;
+        text-align: center;
+      }
+  </style>
+  <script type="text/javascript">
+    function overlay() {
+      el = document.getElementById("trans");
+      //el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
+      el.style.visibility = "visible";
+    }
+    function mb_escape(val) {
+      if (typeof (val) != "string") return val;
+      return val
+      //  .replace(/[\"]/g, '\\"')
+        .replace(/[\\]/g, '\\\\')
+        .replace(/[\/]/g, '\\/')
+        .replace(/[\b]/g, '\\b')
+        .replace(/[\f]/g, '\\f')
+        .replace(/[\n]/g, '\\n')
+        .replace(/[\r]/g, '\\r')
+        .replace(/[\t]/g, '\\t')
+      ;
+    }
+    /*
+  "[{id:\\"55859\\",en:\\"something 1. pron.; indef.; as noun что-то, кое-что, нечто, что-нибудь;\r\nsomething else - что-нибудь другое; to be up to something - замышлять что-то\r\nнедоброе; he is something in the Record Office - он занимает какую-то долж-\r\nность в Архиве; he is something of a painter - он до некоторой степени худож-\r\nник; I felt there was a little something wanting - я чувствовал, что чего-то\r\nне хватает; it is something to be safe home again - приятно вернуться домой\r\nцелым и невредимым; there is something about it in the papers - об этом упоми-\r\nнается в газетах; there is something in what you say - в ваших словах есть до-\r\nля правды; the train gets in at two something - поезд прибывает в два с чем-то\r\nto think oneself something, to think something of oneself - быть высокого мне-\r\nния о себе 2. pron.; indef.; coll.; as adv. 1) до некоторой степени, нес-\r\nколько, немного; something like - немного похожий; something too much of this\r\n- слишком много этого 2) приблизительно; it must be something like six o'clock\r\n- должно быть около шести часов 3) великолепно; that's something like a hit! -\r\nвот это удар!\r\n\\"},{id:\\"55860\\",en:\\"something chronic нечто ужасное\r\n\\"},{id:\\"55861\\",en:\\"something short спиртное\r\n\\"}]"  
+*/
+    function trans(en) {
+      load_async(httpheader + "/php/trans.php?en=" + en, function (data) {
+        try{
+          var s = mb_escape(data);
+          var result = eval('(' + s + ')');
+          s = "<p><b>" + en + "</b></p>";
+          for (var i = 0; i < result.length;i++) {
+            s += "<p>" + result[i].en + "</p>";
+          }
+          id("trans").innerHTML = s;
+        } catch (e) {
+          alert(e + data);
+        }
+      });
+    }
+    function id(name) {
+      var item = document.getElementById(name);
+      return item;
+    }
+    function load_async(file, onsuccess) {
+      var xhr = new XMLHttpRequest();
+      xhr.open("get", file, true);
+      xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+
+      xhr.setRequestHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+      xhr.setRequestHeader('Access-Control-Allow-Methods', 'GET, POST');
+
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4) {
+          if (xhr.status >= 200 && xhr.status < 300 || xhr.status == 304) {
+            var text = xhr.responseText;
+            //  var heders = xhr.getResponseHeader("content-type");
+            onsuccess(text);
+          }
+        }
+      };
+      xhr.send(null);
+    }
+    var httpheader = '';
+    function load_text(name) {
+      //http://www.maxbuk.com
+      load_async(httpheader + "/php/load_book.php?name=" + name, function (txt) {
+        x.settext(txt);
+      });
+    }
+    var ctx;
+    var text;
+
+    var x = {
+      index: 0,
+      y: 24,
+      x: 0,
+      fontsize: 20,
+      lines: [],
+      line: 0,
+      mouseline: 0,
+      pagesize: 0,
+      left_offset: 20,
+
+      settext: function (txt) {
+        text = txt;
+        //this.linescount();
+        this.format(canvas.width - this.left_offset * 2);
+        this.index = 0;
+        this.drawpage();
+
+      },
+      linescount: function () {
+        this.index = 0;
+        this.line = 0;
+        this.lines = [];
+        this.lines.push(0);
+        var i = 0;
+        while (i < text.length) {
+          if (text[i] == '\n') this.lines.push(i);
+          i++;
+        }
+      },
+      format: function (width) {
+        var i = 0;//,previ=0;
+        this.lines = [];
+        this.lines.push(0);
+        var w = 0;
+        var s = "";
+        ctx.font = this.fontsize + "px Georgia";
+        while (i < text.length) {
+          var r = this.get_token(i);
+
+          if (r.w == '\n') {
+            //    var di = i - previ;
+            w = 0;
+            this.lines.push(r.i);
+            i = r.i
+            s = "";
+            //    previ = i;
+            continue;
+          }
+          if (w + r.sz > width) {
+            this.lines.push(i);
+            w = r.sz;
+            i = r.i;
+            //    previ = i;
+            s = r.w;
+            //    continue;
+          }
+          else {
+            s += r.w;
+            w += r.sz;
+            i = r.i;
+          }
+        }
+        this.index = 0;
+        this.line = 0;
+      },
+      keydown: function (e) {
+        switch (e.keyCode) {
+          case 40://down
+            this.move(1);
+            break;
+          case 38:// up
+            this.move(-1);
+            break;
+          case 34:// pgdown
+            this.move(this.pagesize);
+            break;
+          case 33://pgup
+            this.move(-this.pagesize);
+            break;
+          case 36://home
+            this.line = 0;
+            this.drawpage();
+            break;
+          case 35://end
+            this.line = this.lines.length - this.pagesize;
+            this.drawpage();
+            break;
+          case 116:
+            return true;
+          default:
+            alert(e.keyCode);
+            break;
+        }
+        canvas.focus();
+        return false;
+      },
+      mouseweel: function (e) {
+
+        var step = e.wheelDelta > 0 ? -1 : 1;
+        this.move(step);
+
+      },
+      drawpage: function () {
+
+        this.y = this.fontsize;
+        ctx.font = this.fontsize + "px Georgia";
+
+        ctx.fillStyle = "#F0F0F0";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#000000";
+
+        this.index = this.lines[this.line];// + 1;
+        this.pagesize = 0;
+        var width = canvas.width - this.left_offset * 2;
+        var n = this.line;
+        var start;
+        while (this.y < canvas.height) {
+          start = this.lines[n];
+          var i = n + 1 < this.lines.length - 1 ? n + 1 : n;
+          var stop = this.lines[i];
+          //this.get_line(width);
+          this.draw_line(start, stop);//) {
+          //this.y += this.fontsize + 4;
+          //this.pagesize++;
+          // }
+          if (this.pagesize + this.line === this.mouseline) {
+            ctx.beginPath();
+            ctx.moveTo(0, this.y);
+            ctx.lineTo(canvas.width, this.y);
+            ctx.stroke();
+          }
+          n++;
+          this.y += this.fontsize + 4;
+          this.pagesize++;
+        }
+        this.pagesize -= 2;
+      },
+      draw_line: function (start, stop) {
+        var x1 = this.left_offset;
+        var s = "", di = stop - start;
+        var i = start;
+        while (i < stop) {
+          var r = this.get_token(i);
+          s += r.w;
+          if (r.w == '\n') {
+            return (di === 1);
+          }
+
+          if (r.w == '\r') {
+            i = r.i;
+            continue;
+          }
+          this.p(r.w, x1, this.y);
+          x1 += r.sz;
+          i = r.i;
+        }
+        return false;
+      },
+      fontplus: function (step) {
+        this.fontsize += step;
+        ctx.font = this.fontsize + "px Georgia";
+        this.format(canvas.width - 2 * this.left_offset);
+        this.drawpage();
+      },
+      move: function (step) {
+        this.line += step;
+        if (this.line < 0) this.line = 0;
+        if (this.line > this.lines.length - 1) this.line = this.lines.length - 1;
+        this.drawpage();
+
+        return false;
+      }
+, get_token: function (i) {
+  while (text[i] == '\r') {
+    i++;
+  }
+  if (text[i] == '\n') {
+    i++;
+    return { w: '\n', i: i, sz: 0 };
+  }
+
+  if (iswhite(text[i])) {
+    return this.getwhite(i);
+  }
+  return this.getword(i);
+}
+, get_line: function (width) {
+
+  var i = this.index;
+  var words = [];
+  this.x = this.left_offset;
+  var w = 0;
+  while (i < text.length) {
+
+    var r = this.get_token(i);
+    w += r.sz;
+    if (w >= width) break;
+
+    if (r.w == '\n') {
+      i = r.i;
+      break;
+    }
+
+    if (r.w == '\r') {
+      i = r.i;
+      continue;
+    }
+    this.p(r.w, this.x, this.y);
+    this.x += this.m(r.w).width;
+    i = r.i;
+  }
+  this.index = i;
+}
+, m: function (word) {
+  return ctx.measureText(word);
+}
+, p: function (text, x, y) {
+  ctx.fillText(text, x, y);
+}
+, getword: function (i) {
+  var s = "";
+
+  while (i < text.length) {
+    var c = text[i];
+    if (c === ' ' || c === '\t' || c === '\n' || c === '\r') break;
+    s += c;
+    i++;
+  }
+  return { w: s, i: i, sz: this.m(s).width };
+}
+, getwhite: function (i) {
+  var s = "";
+
+  while (i < text.length && text[i] == ' ' || text[i] == '\t') {
+    s += text[i];
+    i++;
+  }
+  return { w: s, i: i, sz: x.m(s).width };
+
+}
+
+    };
+
+    function getMousePos(canvas, e) {
+      var rect = canvas.getBoundingClientRect();
+      return {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+      };
+    }
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+      var c = document.getElementById("canvas");
+      ctx = c.getContext("2d");
+
+      if (window.external._getText) {
+        httpheader = 'http://www.maxbuk.com';
+        x.settext(window.external._getText());
+      }
+      else {
+        //load_text('26071-0.txt');
+        load_text('noam-chomsky-interviewed-by-peter-jay-the-relevance-of-anarcho-syndicalism.muse');
+      }
+      //
+      canvas.addEventListener('mousemove', function (e) {
+        var p = getMousePos(canvas, e);
+        var lns = parseInt(canvas.height / (x.fontsize + 4));
+        var ln = parseInt(p.y / (x.fontsize + 4));
+
+        var message = 'DOWN x: ' + p.x + '  y:' + p.y + ' cn:' + lns + ' ln:' + ln
+        + ' cl:' + (ln + x.line);
+        //  info.innerText = message;
+
+      }, false);
+
+      canvas.addEventListener('mousedown', function (e) {
+        var p = getMousePos(canvas, e);
+        var offset = parseInt(p.y / (x.fontsize + 4));
+        x.mouseline = x.line + offset;
+        var i = x.lines[x.mouseline];
+        var width = canvas.width - 2 * x.left_offset;
+        var x1 = x.left_offset;
+        var x2 = x1;
+        do {
+          var r = x.get_token(i);
+          x2 = x1 + r.sz;
+          if (x1 < p.x && p.x < x2) {
+            info.innerText = r.w;
+            //id("trans").innerHTML = "<p>" + r.w + "</p>";
+            trans(r.w);
+           // overlay();
+            break;
+          }
+          i = r.i;
+          x1 = x2;
+        } while (x1 < width);
+        x.drawpage();
+      }, false);
+
+
+      document.addEventListener("touchstart", touchHandler, false);
+      document.addEventListener("touchmove", touchHandler, false);
+      document.addEventListener("touchend", touchHandler, false);
+      canvas.addEventListener('scroll', function (e) {
+        //console.log(this.scrollTop);
+        // alert(e);
+      });
+
+      var touchpoint = { x: 0, y: 0 };
+
+      function touchHandler(event) {
+        try {
+          var offset = {};
+          var step = 0;
+          if (event.type == "touchstart") {
+            touchpoint.x = event.touches[0].pageX;
+            touchpoint.y = event.touches[0].pageY
+          } else if (event.type == "touchmove") {
+
+            offset.x = touchpoint.x - event.touches[0].pageX;
+            offset.y = touchpoint.y - event.touches[0].pageY;
+            //info.innerText = offset.y + ' x:' + offset.x;
+            step = offset.x > 0 || offset.y > 0 ? x.pagesize : -x.pagesize;
+
+          } else if (event.type == "touchend" || event.type == "touchcancel") {
+            // alert(step);
+            x.move(step);
+          }
+        } catch (e) {
+          alert(e);
+        }
+      }
+      //---
+    });
+
+    //----------------------------------------
+
+
+    function iswhite(c) {
+      return c === ' ' || c === '\t';// || c === '\r';// || c == '\n';
+    }
+    //----------------------------------------
+    //----------------------------------------
+    function mb_resize() {
+      var c = id("canvas");
+      if (c) {
+       // c.height = window.innerHeight * 0.5;
+       // c.width = window.innerWidth;// * 0.75;
+
+        x.drawpage();
+      }
+      //alert(c + ' ' + window.innerHeight);
+    }
+
+  </script>
+</head>
+<body onkeydown="return x.keydown(event);" onmousewheel="x.mouseweel(event);" onresize="mb_resize();">
+
+  
+    <canvas id="canvas" style="border:1px solid #d3d3d3;">
+      Your browser does not support the HTML5 canvas tag.
+    </canvas>
+  
+<!--
+  <div>
+
+    <table style="color:whitesmoke;">
+      <tr>
+        <td><button onclick="x.fontplus(2);">F+</button></td>
+        <td><button onclick="x.fontplus(-2);">F-</button></td>
+        <td><button onclick="x.fontplus(-2);">wrap</button></td>
+      </tr>
+      <tr><td id="info" colspan="2"></td></tr>
+      <tr><td colspan="2" onclick="load_text('nachie-anarcho-sceneism-what-it-is-and-how-to-fight-it.muse');">How to fight</td></tr>
+      <tr><td colspan="2" onclick="load_text('26071-0.txt');">Religion and Lust</td></tr>
+
+      <tr><td colspan="2" onclick="load_text('noam-chomsky-interviewed-by-peter-jay-the-relevance-of-anarcho-syndicalism.muse');">Religion and Lust</td></tr>
+    </table>
+  </div>
+-->
+<!--
+  <div id="overlay" onclick="overlay();">
+    <div id="trans" style="opacity:0.9;">
+      <p>Content you want the user to see goes here.</p>
+    </div>
+  </div>
+-->
+<!--
+  <div  
+     style="opacity:0.8;background-color:yellow;color:black;">
+    <div id="trans" style="margin:10px;">
+
+    </div>
+    
+  </div>
+-->
+</body>
+</html>

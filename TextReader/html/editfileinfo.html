@@ -1,0 +1,62 @@
+﻿<DOCTYPE html>
+<html>
+  <head>
+    <style>
+      input {
+      width:100%;
+      }
+      table {
+      width:100%;
+      }
+    </style>
+  </head>
+  <script type="text/javascript">
+    function saveBookInfo(){
+    var s = "Author:" + author.value
+    + ";Title:" + title.value
+    + ";Comment:" + comment.value;
+    window.external._saveBookInfo(file.innerText,s);
+    }
+  </script>
+<body>
+  
+    <table style="cursor:pointer;">
+      <tr>
+        <td>Author</td>
+        <td>
+          <input id="author" type="text" value="@Author"/>
+        </td>
+      </tr>
+      <tr>
+        <td>Title</td>
+        <td>
+          <input id="title" type="text" value="@Title"/>
+        </td>
+      </tr>
+      <tr>
+        <td>Comment</td>
+        <td>
+          <input id="comment" type="text" value="@Comment"/>
+        </td>
+      </tr>
+      <tr>
+        <td>File</td>
+        <td id="file">@File</td>
+      </tr>
+
+    </table>
+  <table>
+    <tr>
+      <td>
+        <button onclick="window.external._showHistory()">Cancel</button>
+      </td>
+      <td>
+        <button onclick="window.external._conver2Txt('@File')">Conver 2 txt</button>
+      </td>
+      <td>
+        <button onclick="saveBookInfo();">Save Info</button>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
