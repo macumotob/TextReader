@@ -27,7 +27,7 @@ namespace Baybak.TextReader
     int _mouse_x = 0, _mouse_y = 0;
     bool _word_is_selected = false;
 
-    Font _font = new Font("Lucida Console", 12);
+    Font _font = new Font("Lucida Console", 14);
 
     List<string> _words = new List<string>();
     List<float> _widths = new List<float>();
@@ -59,16 +59,16 @@ namespace Baybak.TextReader
     {
       get
       {
-        return StringFormat.GenericTypographic;
-        //if (this._stringFormat == null)
-        //{
-        //  this._stringFormat = new StringFormat(StringFormatFlags.NoWrap );
+        //return StringFormat.GenericTypographic;
+        if (this._stringFormat == null)
+        {
+          this._stringFormat = new StringFormat(StringFormatFlags.NoWrap);
 
-        //  //this._stringFormat.LineAlignment = StringAlignment.Near;
-        //  //this._stringFormat.Alignment = StringAlignment.Near;
-        //  // this._stringFormat.Trimming = StringTrimming.Word;
-        //}
-        //return this._stringFormat;
+          this._stringFormat.LineAlignment = StringAlignment.Near;
+          this._stringFormat.Alignment = StringAlignment.Near;
+           this._stringFormat.Trimming = StringTrimming.Word;
+        }
+        return this._stringFormat;
       }
     }
     StringFormat _stringFormat = StringFormat.GenericTypographic;
@@ -236,7 +236,7 @@ namespace Baybak.TextReader
     SizeF _wordSize;
     SizeF _getWordSize(Graphics g,string s)
     {
-      _wordSize  = g.MeasureString(s, this.Font, 1000, _stringFormat);
+      _wordSize  = g.MeasureString(s, _font, 1000, _stringFormat);
       return _wordSize;
     }
     private void _get_line_words(Graphics g,ref int i, float width)
@@ -312,7 +312,7 @@ namespace Baybak.TextReader
       _lineNumber = 0;
       _lines_per_page = 0;
 
-      SizeF size = g.MeasureString("W", this.Font, 100, _stringFormat);
+      SizeF size = g.MeasureString("W", _font, 100, _stringFormat);
 
       float leftMargin = 100,rightMargin = 50;
       _lineHeight = size.Height;
