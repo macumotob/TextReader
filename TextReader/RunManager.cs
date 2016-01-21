@@ -59,5 +59,15 @@ namespace Baybak.TextReader
         return "";
       }
     }
+
+    System.Speech.Synthesis.SpeechSynthesizer _speecher = new System.Speech.Synthesis.SpeechSynthesizer();
+
+    public void Speek(string text)
+    {
+      _speecher.Volume = 100;
+      _speecher.Rate = 0;
+      _speecher.Speak(text);
+    }
+
   } // end of class
 }

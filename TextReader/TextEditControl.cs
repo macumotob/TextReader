@@ -24,6 +24,10 @@ namespace Baybak.TextReader
     int _lines_per_page = 0;
     int _selectedLine = 0;
     float _lineHeight;
+    int _mouse_x = 0, _mouse_y = 0;
+    bool _word_is_selected = false;
+
+    Font _font = new Font("Lucida Console", 12);
 
     List<string> _words = new List<string>();
     List<float> _widths = new List<float>();
@@ -163,8 +167,6 @@ namespace Baybak.TextReader
       }
       base.OnKeyDown(e);
     }
-    private int _mouse_x = 0, _mouse_y = 0;
-    private bool _word_is_selected = false;
     private void _raise_word_selected(string word)
     {
       if (OnWordSelected != null && _word_is_selected)
@@ -189,6 +191,7 @@ namespace Baybak.TextReader
     }
     protected override void OnMouseWheel(MouseEventArgs e)
     {
+      _word_is_selected = false;
       _topLine += (e.Delta < 0 ? 1 : -1);
       if (_topLine < 0) _topLine = 0;
       _firstVisibleIndex = _findFirstChar(_topLine);
@@ -197,13 +200,12 @@ namespace Baybak.TextReader
     }
 
     int _lineNumber;
-    void _drawLineNumber(Graphics g)
+    void _draw_line_number(Graphics g)
     {
       
       float x = 0;
       float y = _lineNumber * _lineHeight;
-
-      g.DrawString((_topLine + _lineNumber).ToString(), this.Font, Brushes.Gray, x, y, _stringFormat);
+      g.DrawString((_topLine + _lineNumber).ToString(), _font, Brushes.Black, x, y + 7, _stringFormat);
       _lineNumber++;
     }
     bool _isWhite(char c)
@@ -237,11 +239,13 @@ namespace Baybak.TextReader
       _wordSize  = g.MeasureString(s, this.Font, 1000, _stringFormat);
       return _wordSize;
     }
-    void _getLineWords(Graphics g,ref int i, float width)
+    private void _get_line_words(Graphics g,ref int i, float width)
     {
       _words.Clear();
       _widths.Clear();
       _widths.Add(0);
+      if (i == -1) return;
+
       string s;
       float w = 0;
       while(i < _text.Length)
@@ -319,10 +323,14 @@ namespace Baybak.TextReader
       label_next_line:
       float x = leftMargin;
 
-      _drawLineNumber(g);
-      
-      _getLineWords(g, ref i, e.ClipRectangle.Width - rightMargin - leftMargin);
+      _lines_per_page = (int)(this.Height / _lineHeight) - 1;
 
+      _get_line_words(g, ref i, e.ClipRectangle.Width - rightMargin - leftMargin);
+
+      if (i >= _text.Length) return;
+
+      _draw_line_number(g);
+   
 
       if (_words.Count > 0)
       {
@@ -334,7 +342,7 @@ namespace Baybak.TextReader
           {
             if (_widths[n] <= _mouse_x - leftMargin && _mouse_x - leftMargin <= _widths[n+1])
             {
-              brush = Brushes.Blue;
+              brush = _word_is_selected ? Brushes.Blue : Brushes.Black;
               _raise_word_selected(_words[n]);
             }
           }
@@ -347,12 +355,12 @@ namespace Baybak.TextReader
 
       y += _lineHeight;
       if (y < this.Height) goto label_next_line;
-      y = (_selectedLine + 1) * _lineHeight;
-      g.DrawLine(Pens.Gray, 0, y, this.Width, y);
-      x = leftMargin;
-      g.DrawLine(Pens.Yellow, x, y - _lineHeight, x, y);
 
-      _lines_per_page = (int)(this.Height / _lineHeight) - 1;
+      y = (_selectedLine + 1) * _lineHeight;
+  //    g.DrawLine(Pens.Gray, 0, y, this.Width, y);
+      x = leftMargin - 3;
+      g.DrawLine(Pens.Green, x, 0, x,  this.Height);
+
     }
     protected override void OnResize(EventArgs e)
     {

@@ -13,6 +13,7 @@ namespace Baybak.TextReader
   {
     private string _fileName;
 
+    public frmMain _main_form;
     public frmComments()
     {
       InitializeComponent();
@@ -21,7 +22,10 @@ namespace Baybak.TextReader
 
     private void _editor_OnWordSelected(string word)
     {
-      this.Text = word; 
+      this.Text = word;
+      RunManager.Manager.Speek(word);
+      _main_form._show_translation_result(word);
+
     }
 
     void _textContent_KeyDown(object sender, KeyEventArgs e)

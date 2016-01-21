@@ -26,7 +26,7 @@ namespace Baybak.TextReader
       //this.textViewer1.OnWordSelected += new TextViewer.EventWordSelected(textViewer1_OnWordSelected);
      // this.textViewer1._Helper = this._Helper;
       this.textViewer1._OnBookmarkChanged += new TextViewer.EventBookmarkChanged(textViewer1__OnBookmarkChanged);
-      this.textViewer1.OnTextSelected += (w) => { _showTranslationResult(w); };
+      this.textViewer1.OnTextSelected += (w) => { _show_translation_result(w); };
       //_Speeker._OnTextToSpeechNeeded += new UserControlSpeeker.EventTextToSpeechNeeded(_Speeker__OnTextToSpeechNeeded);
       _webBrowser.DocumentCompleted += _webBrowser_DocumentCompleted;
    //   _webBrowser.AllowWebBrowserDrop = false;
@@ -79,13 +79,13 @@ namespace Baybak.TextReader
       var dv = _webBrowser.Document.GetElementById("result");
       if (dv != null)
       {
-        dv.InnerHtml = _TranslateWord(text);
+        dv.InnerHtml = _translate_word(text);
       }
     }
     private string _englishWord;
     private List<string> _translateResult;
     private List<string> _translateResultAll;
-    public string  _TranslateWord(string word)
+    private string  _translate_word(string word)
     {
       _englishWord = word;
       Words.Translate(word, out _translateResult, out _translateResultAll);
@@ -113,10 +113,10 @@ namespace Baybak.TextReader
       return result;
     }
 
-    void _showTranslationResult(string text)
+    public void _show_translation_result(string text)
     {
       string s = Properties.Resources.tr.Replace("{{TEXT}}", text);
-      string result = _TranslateWord(text);
+      string result = _translate_word(text);
 
       _webBrowser.DocumentText = s;
     }
@@ -440,6 +440,7 @@ namespace Baybak.TextReader
     private void _commandEditor_Click(object sender, EventArgs e)
     {
       frmComments frm = new frmComments();
+      frm._main_form = this;
       frm.LoadFromFile(_broker.CurrentBook.FileName);
       frm.Show(this);
     }
