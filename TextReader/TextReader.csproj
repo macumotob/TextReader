@@ -169,6 +169,7 @@
     <EmbeddedResource Include="html\canvas.html">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <Content Include="dlls\SS.GoogleTranslation.dll" />
     <Content Include="html\google.ico" />
     <EmbeddedResource Include="html\add2dic.html">
       <SubType>Designer</SubType>
