@@ -12,17 +12,31 @@ namespace Baybak.TextReader
 {
   public partial class TextEditControl : UserControl
   {
-    string _fileName = @"E:\waswas\GEORGE WOODCOCK.txt";
+    public delegate void EventWordSelected(string word);
+    public event EventWordSelected OnWordSelected;
+
+
+    string _file_name = @"E:\waswas\GEORGE WOODCOCK.txt";
     string _text;
+    int _topLine = 0;
+    int _firstVisibleIndex = 0;
+    int _currentEditIndex;
+    int _lines_per_page = 0;
+    int _selectedLine = 0;
+    float _lineHeight;
+
+    List<string> _words = new List<string>();
+    List<float> _widths = new List<float>();
+
+
     public TextEditControl()
     {
       InitializeComponent();
     }
     public void LoadFromFile(string file)
     {
-      _fileName = file;
-      this.Text = System.IO.File.ReadAllText(_fileName,Encoding.UTF8);//, Encoding.Unicode);
-
+      _file_name = file;
+      this.Text = System.IO.File.ReadAllText(_file_name, Encoding.UTF8);//, Encoding.Unicode);
     }
     public string Text
     {
@@ -113,12 +127,6 @@ namespace Baybak.TextReader
       this.Invalidate();
       //base.OnKeyPress(e);
     }
-    int _topLine = 0;
-    int _firstVisibleIndex = 0;
-    int _currentEditIndex;
-    int _pageSize = 0;
-    int _selectedLine=0;
-    float _lineHeight;
     protected override void OnKeyDown(KeyEventArgs e)
     {
       if(e.KeyCode == Keys.Down)
@@ -130,7 +138,7 @@ namespace Baybak.TextReader
       }
       else if(e.KeyCode == Keys.PageDown)
       {
-        _topLine += _pageSize;
+        _topLine += _lines_per_page;
         int i =_findFirstChar(_topLine);
         if(i != -1)
         {
@@ -140,7 +148,7 @@ namespace Baybak.TextReader
       }
       else if (e.KeyCode == Keys.PageUp)
       {
-        _topLine -= _pageSize;
+        _topLine -= _lines_per_page;
         if (_topLine < 0) _topLine = 0;
         _firstVisibleIndex = _findFirstChar(_topLine);
         this.Invalidate();
@@ -155,10 +163,26 @@ namespace Baybak.TextReader
       }
       base.OnKeyDown(e);
     }
+    private int _mouse_x = 0, _mouse_y = 0;
+    private bool _word_is_selected = false;
+    private void _raise_word_selected(string word)
+    {
+      if (OnWordSelected != null && _word_is_selected)
+      {
+        OnWordSelected(word);
+      }
+      _word_is_selected = false;
+    }
     protected override void OnMouseDown(MouseEventArgs e)
     {
-      _selectedLine = (int)( e.Y / _lineHeight);
+      //  base.OnMouseDown(e);
+
+      _selectedLine = (int)(e.Y / _lineHeight);
       _currentEditIndex = _findFirstChar(_selectedLine + _topLine);
+
+      _mouse_x = e.X;
+      _mouse_y = e.Y;
+      _word_is_selected = true;
 
       this.Invalidate();
       base.OnMouseDown(e);
@@ -175,14 +199,13 @@ namespace Baybak.TextReader
     int _lineNumber;
     void _drawLineNumber(Graphics g)
     {
+      
       float x = 0;
       float y = _lineNumber * _lineHeight;
 
       g.DrawString((_topLine + _lineNumber).ToString(), this.Font, Brushes.Gray, x, y, _stringFormat);
       _lineNumber++;
     }
-    List<string> _words = new List<string>();
-    List<float> _widths = new List<float>();
     bool _isWhite(char c)
     {
       return c == ' ' || c == '\t' || c == '\r' || c == '\n';
@@ -270,9 +293,9 @@ namespace Baybak.TextReader
     {
       base.OnPaintBackground(e);
     }
+    
     protected override void OnPaint(PaintEventArgs e)
     {
-
       _stringFormat.Trimming = StringTrimming.None;
       _stringFormat.FormatFlags = StringFormatFlags.MeasureTrailingSpaces | StringFormatFlags.NoWrap;
       e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
@@ -283,7 +306,7 @@ namespace Baybak.TextReader
       if (_text == null) return;
 
       _lineNumber = 0;
-      _pageSize = 0;
+      _lines_per_page = 0;
 
       SizeF size = g.MeasureString("W", this.Font, 100, _stringFormat);
 
@@ -292,27 +315,44 @@ namespace Baybak.TextReader
       int i = _firstVisibleIndex;
       float y = 0;
 
+      
       label_next_line:
       float x = leftMargin;
 
       _drawLineNumber(g);
+      
       _getLineWords(g, ref i, e.ClipRectangle.Width - rightMargin - leftMargin);
+
+
       if (_words.Count > 0)
       {
         int n  = 0;
         foreach (string word in _words)
         {
+          Brush brush = Brushes.Black;
+          if (_lineNumber -1 == _selectedLine )
+          {
+            if (_widths[n] <= _mouse_x - leftMargin && _mouse_x - leftMargin <= _widths[n+1])
+            {
+              brush = Brushes.Blue;
+              _raise_word_selected(_words[n]);
+            }
+          }
+
           x = leftMargin + _widths[n++];
-          g.DrawString(word, this.Font, Brushes.Black, x, y, _stringFormat);
+          g.DrawString(word, this.Font, brush, x, y, _stringFormat);
          // g.DrawLine(Pens.Gray, x, y, x, y + _lineHeight);
         }
       }
+
       y += _lineHeight;
       if (y < this.Height) goto label_next_line;
       y = (_selectedLine + 1) * _lineHeight;
       g.DrawLine(Pens.Gray, 0, y, this.Width, y);
       x = leftMargin;
       g.DrawLine(Pens.Yellow, x, y - _lineHeight, x, y);
+
+      _lines_per_page = (int)(this.Height / _lineHeight) - 1;
     }
     protected override void OnResize(EventArgs e)
     {

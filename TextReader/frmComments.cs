@@ -16,7 +16,12 @@ namespace Baybak.TextReader
     public frmComments()
     {
       InitializeComponent();
+      _editor.OnWordSelected += _editor_OnWordSelected;
+    }
 
+    private void _editor_OnWordSelected(string word)
+    {
+      this.Text = word; 
     }
 
     void _textContent_KeyDown(object sender, KeyEventArgs e)
@@ -38,7 +43,8 @@ namespace Baybak.TextReader
     }
     public void LoadFromFile( string file)
     {
-      textEditControl1.LoadFromFile(file);
+      this.Text = file;
+      _editor.LoadFromFile(file);
     }
   }
 }

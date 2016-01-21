@@ -29,15 +29,22 @@ namespace Baybak.TextReader
       this.textViewer1.OnTextSelected += (w) => { _showTranslationResult(w); };
       //_Speeker._OnTextToSpeechNeeded += new UserControlSpeeker.EventTextToSpeechNeeded(_Speeker__OnTextToSpeechNeeded);
       _webBrowser.DocumentCompleted += _webBrowser_DocumentCompleted;
-      _webBrowser.AllowWebBrowserDrop = false;
+   //   _webBrowser.AllowWebBrowserDrop = false;
       _webBrowser.IsWebBrowserContextMenuEnabled = false;
      // _webBrowser.WebBrowserShortcutsEnabled = false;
       _webBrowser.ScriptErrorsSuppressed = true;
       _webBrowser.ObjectForScripting = this;
       //_ToolBarG._AddHandler("Book", _OpenBook2Read);
-    //  _ToolBarG._AddHandler("Edit", _EditCurrentBook);
-
+      //  _ToolBarG._AddHandler("Edit", _EditCurrentBook);
+      RunManager.OnException += Manager_OnException;
    }
+
+    private void Manager_OnException(Exception e)
+    {
+      string text = e.ToString();
+      MessageBox.Show(text, "Run Manager Exception");
+    }
+
     bool _historyLoaded;
     void _webBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
     {
@@ -285,8 +292,7 @@ namespace Baybak.TextReader
      }
      else
      {
-       RunManager m = new RunManager();
-       m.RunApplication(file);
+       RunManager.Manager.RunApplication(file);
      }
     }
     public void _editFileInfo(string file)
