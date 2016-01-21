@@ -87,6 +87,10 @@ namespace Baybak.TextReader
       //int offset = (mouse.Y - this._Borders.Text.Y) / (int)_size.Height;
       int offset = (mouse.Y - top) / (int)_Size.Height;
       int line = this.FirstVisibleLine + offset;
+      if(line >= this.LineWordsIndex.Count-1)
+      {
+        line = this.LineWordsIndex.Count - 1;
+      }
       if (line == -1)
       {
         return -1;
