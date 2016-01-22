@@ -207,18 +207,19 @@ namespace Baybak.TextReader
         sw.Close();
       }
     }
-    void _saveAll()
+    void _save_all()
     {
       if (_broker != null)
       {
         _broker.SaveHistory();
       }
       _saveComments();
+      RunManager.Manager.Speek("document saved");
     }
 
     protected override void OnClosed(EventArgs e)
     {
-      _saveAll();
+      _save_all();
       base.OnClosed(e);
     }
 
@@ -269,7 +270,7 @@ namespace Baybak.TextReader
    // frmComments _commentsForm;
     public void _openFile(string file)
     {
-      _saveAll();
+      _save_all();
       _historyLoaded = false;
       this.splitContainer2.SplitterDistance = this.Width / 2;
 
@@ -415,7 +416,8 @@ namespace Baybak.TextReader
     {
       if(e.KeyCode == Keys.S && e.Control)
       {
-        _saveComments();
+        //_saveComments();
+        _save_all();
       }
       base.OnKeyDown(e);
     }
