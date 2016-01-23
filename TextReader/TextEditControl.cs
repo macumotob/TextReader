@@ -50,19 +50,21 @@ namespace Baybak.TextReader
     public void LoadFromFile(string file)
     {
       _file_name = file;
-      string s = System.IO.File.ReadAllText(_form_file_name, Encoding.UTF8);
-      string[] dt = s.Split(' ');
-      if (dt.Length == 6)
+      if (System.IO.File.Exists(_form_file_name))
       {
-        _firstVisibleIndex = int.Parse(dt[0]);
-        _topLine = int.Parse(dt[1]);
+        string s = System.IO.File.ReadAllText(_form_file_name, Encoding.UTF8);
+        string[] dt = s.Split(' ');
+        if (dt.Length == 6)
+        {
+          _firstVisibleIndex = int.Parse(dt[0]);
+          _topLine = int.Parse(dt[1]);
 
-        Form frm = this.FindForm();
-        frm.Width = int.Parse(dt[2]);
-        frm.Height = int.Parse(dt[3]);
-        frm.Location =  new Point(int.Parse(dt[4]), int.Parse(dt[5]));
+          Form frm = this.FindForm();
+          frm.Width = int.Parse(dt[2]);
+          frm.Height = int.Parse(dt[3]);
+          frm.Location = new Point(int.Parse(dt[4]), int.Parse(dt[5]));
+        }
       }
-
       this.Text = System.IO.File.ReadAllText(_file_name, Encoding.UTF8);//, Encoding.Unicode);
 
     }
