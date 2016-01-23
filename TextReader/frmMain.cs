@@ -186,6 +186,7 @@ namespace Baybak.TextReader
      {
        this._MakeTranslation(word);
      }*/
+    private frmTranslator _frm_translator;
     protected override void OnShown(EventArgs e)
     {
       _translator.LoadFromFile(Application.StartupPath + "\\mydic.bin");
@@ -194,6 +195,8 @@ namespace Baybak.TextReader
       {
         _openFile(_broker.CurrentBook.FileName);
       }
+      _frm_translator = new frmTranslator();
+      _frm_translator.Show(this);
       base.OnShown(e);
     }
 
@@ -442,7 +445,7 @@ namespace Baybak.TextReader
     private void _commandEditor_Click(object sender, EventArgs e)
     {
       frmComments frm = new frmComments();
-      frm._main_form = this;
+      frm._main_form = _frm_translator;
       frm.LoadFromFile(_broker.CurrentBook.FileName);
       frm.Show(this);
     }

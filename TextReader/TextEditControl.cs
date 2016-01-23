@@ -32,15 +32,56 @@ namespace Baybak.TextReader
     List<string> _words = new List<string>();
     List<float> _widths = new List<float>();
 
-
+    
     public TextEditControl()
     {
       InitializeComponent();
     }
+    private string _form_file_name
+    {
+      get
+      {
+        string ext = System.IO.Path.GetExtension(_file_name);
+        string data_file = _file_name.Replace(ext, ".frm");
+        return data_file;
+      }
+    }
+
     public void LoadFromFile(string file)
     {
       _file_name = file;
+      string s = System.IO.File.ReadAllText(_form_file_name, Encoding.UTF8);
+      string[] dt = s.Split(' ');
+      if (dt.Length == 6)
+      {
+        _firstVisibleIndex = int.Parse(dt[0]);
+        _topLine = int.Parse(dt[1]);
+
+        Form frm = this.FindForm();
+        frm.Width = int.Parse(dt[2]);
+        frm.Height = int.Parse(dt[3]);
+        frm.Location =  new Point(int.Parse(dt[4]), int.Parse(dt[5]));
+      }
+
       this.Text = System.IO.File.ReadAllText(_file_name, Encoding.UTF8);//, Encoding.Unicode);
+
+    }
+    public void Save()
+    {
+      Form frm = this.FindForm();
+      using (System.IO.StreamWriter sw = new System.IO.StreamWriter(_form_file_name, false, Encoding.UTF8))
+      {
+        Point p = frm.PointToScreen(frm.Location);
+
+        sw.WriteLine(string.Format("{0} {1} {2} {3} {4} {5}", 
+          _firstVisibleIndex.ToString() ,_topLine.ToString(),
+          frm.Width.ToString() ,frm.Height.ToString() ,
+        //  frm.Location.X.ToString(), frm.Location.Y.ToString() )
+          p.X.ToString(), p.Y.ToString()
+          ));
+        sw.Close();
+        sw.Dispose();
+      }
     }
     public string Text
     {
@@ -79,6 +120,8 @@ namespace Baybak.TextReader
     //}
     private int _findFirstChar(int line)
     {
+      if (_text == null) return 0;
+
       if (line == 0) return 0;
       int index = 0;
       for (int i = 1; i <= line; i++)

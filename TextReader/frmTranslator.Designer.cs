@@ -42,7 +42,7 @@
       // 
       this._cmdTrans.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
       this._cmdTrans.ForeColor = System.Drawing.Color.PeachPuff;
-      this._cmdTrans.Location = new System.Drawing.Point(646, 9);
+      this._cmdTrans.Location = new System.Drawing.Point(715, 9);
       this._cmdTrans.Name = "_cmdTrans";
       this._cmdTrans.Size = new System.Drawing.Size(75, 26);
       this._cmdTrans.TabIndex = 0;
@@ -66,7 +66,7 @@
       this._txtWord.Font = new System.Drawing.Font("Georgia", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
       this._txtWord.Location = new System.Drawing.Point(163, 9);
       this._txtWord.Name = "_txtWord";
-      this._txtWord.Size = new System.Drawing.Size(468, 26);
+      this._txtWord.Size = new System.Drawing.Size(537, 26);
       this._txtWord.TabIndex = 2;
       this._txtWord.KeyDown += new System.Windows.Forms.KeyEventHandler(this._txtWord_KeyDown);
       // 
@@ -78,7 +78,7 @@
       this._browser.Location = new System.Drawing.Point(12, 41);
       this._browser.MinimumSize = new System.Drawing.Size(20, 20);
       this._browser.Name = "_browser";
-      this._browser.Size = new System.Drawing.Size(709, 342);
+      this._browser.Size = new System.Drawing.Size(778, 437);
       this._browser.TabIndex = 4;
       // 
       // _commandBack
@@ -126,7 +126,7 @@
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.BackColor = System.Drawing.Color.Khaki;
-      this.ClientSize = new System.Drawing.Size(733, 395);
+      this.ClientSize = new System.Drawing.Size(802, 490);
       this.Controls.Add(this._cmdLib);
       this.Controls.Add(this._commandCanvas);
       this.Controls.Add(this._commandHrefs);

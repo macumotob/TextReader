@@ -29,8 +29,8 @@ namespace Baybak.TextReader
      // _browser.ScriptErrorsSuppressed = true;
       _browser.ObjectForScripting = this;
 
-      _browser.DocumentCompleted += _browser_DocumentCompleted;
-      _browser.Navigating += _browser_Navigating;
+ //     _browser.DocumentCompleted += _browser_DocumentCompleted;
+ //     _browser.Navigating += _browser_Navigating;
       
     }
     private BooksBroker _broker
@@ -47,6 +47,46 @@ namespace Baybak.TextReader
         return _broker.CurrentBook;
       }
     }
+
+    private string _englishWord;
+    private List<string> _translateResult;
+    private List<string> _translateResultAll;
+    Translator _translator = new Translator();
+
+    private string _translate_word(string word)
+    {
+      _englishWord = word;
+      Words.Translate(word, out _translateResult, out _translateResultAll);
+      string result = "<br/>";
+      List<TranslateItem> list = _translator.Translate(word);
+      foreach (TranslateItem item in list)
+      {
+        result += item.ToHtml();// "<p><b>" + item.English + "</b> Syn:<i>" + item.Synonim + "</i> " + item.Russian + "</p>";
+      }
+
+      if (_translateResult.Count > 0)
+      {
+        foreach (string s in _translateResult)
+        {
+          result += "<p>" + s + "</p><br/>";
+        }
+      }
+      else
+      {
+        foreach (string s in _translateResultAll)
+        {
+          result += "<p>" + s + "</p><br/>";
+        }
+      }
+      return result;
+    }
+    public void _show_translation_result(string text)
+    {
+      string s = Properties.Resources.tr.Replace("{{TEXT}}", text);
+      string result = _translate_word(text);
+      _browser.DocumentText = s.Replace("1234",result);
+    }
+
     public string _getText()
     {
       string text = System.IO.File.ReadAllText(_book.FileName, Encoding.UTF8);
@@ -65,15 +105,15 @@ namespace Baybak.TextReader
 
     protected override void OnShown(EventArgs e)
     {
-      _zipper.Load();
-      string s = "<table width='100%'><tr><td valign='top'><table width='10%'>";
-      Dictionary<char, int> dic = _zipper.GetChars();
-      foreach (char c in dic.Keys)
-      {
-        s += "<tr onclick=\"window.external.ShowBooks(\'" + c + "\');\"><td>" + c + "</td><td>" + dic[c].ToString() + "</td></tr>";
-      }
-      s += "</table width='90%'></td><td valign='top'><div style='width:100%;' id='bist'>555</div></td></tr></table>";
-      _browser.DocumentText = s;
+      //_zipper.Load();
+      //string s = "<table width='100%'><tr><td valign='top'><table width='10%'>";
+      //Dictionary<char, int> dic = _zipper.GetChars();
+      //foreach (char c in dic.Keys)
+      //{
+      //  s += "<tr onclick=\"window.external.ShowBooks(\'" + c + "\');\"><td>" + c + "</td><td>" + dic[c].ToString() + "</td></tr>";
+      //}
+      //s += "</table width='90%'></td><td valign='top'><div style='width:100%;' id='bist'>555</div></td></tr></table>";
+      //_browser.DocumentText = s;
 
       //_links.LoadFromFile(Application.StartupPath + "\\links.data");
       //_browser.Navigate("http://kinogo.co/5712-shtamm-2-sezon.html");
@@ -82,15 +122,15 @@ namespace Baybak.TextReader
     }
     void _browser_Navigating(object sender, WebBrowserNavigatingEventArgs e)
     {
-      if (_links != null)
-      {
-        string s = e.Url.ToString().ToLower();
-        e.Cancel = _dontNavigate(s);
-        if (!e.Cancel)
-        {
-         // _links.Add(s, "");
-        }
-      }
+      //if (_links != null)
+      //{
+      //  string s = e.Url.ToString().ToLower();
+      //  e.Cancel = _dontNavigate(s);
+      //  if (!e.Cancel)
+      //  {
+      //   // _links.Add(s, "");
+      //  }
+      //}
     }
 
 

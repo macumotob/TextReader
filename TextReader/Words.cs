@@ -90,22 +90,38 @@ namespace Baybak.TextReader
       }
       return new List<string>();
     }
+    private static bool _is_letter(char c)
+    {
+      return char.IsLetter(c);
+    }
     static public void Translate(string word, out List<string> result, out List<string> result2)
     {
       result = result2 = new List<string>();
-      if(string.IsNullOrEmpty(word) || string.IsNullOrWhiteSpace(word))
+      if (string.IsNullOrEmpty(word) || string.IsNullOrWhiteSpace(word))
       {
         return;
       }
-      result2 =  _words.FindAll((w) => { return w.IndexOf(word, StringComparison.InvariantCultureIgnoreCase) == 0; });
+
+      string s = "";
+      int i = 0;
+      while (i < word.Length)
+      {
+        if (_is_letter(word[i]))
+        {
+          s += word[i];
+        }
+        i++;
+      }
+      word = s;
+      result2 = _words.FindAll((w) => { return w.IndexOf(word, StringComparison.InvariantCultureIgnoreCase) == 0; });
       if (result2.Count == 0)
       {
-          result2 = _findVariants(word);
+        result2 = _findVariants(word);
       }
       else if (result2.Count == 1)
       {
         List<string> r = _findVariants(word);
-        foreach(string w in r)
+        foreach (string w in r)
         {
           result2.Add(w);
         }

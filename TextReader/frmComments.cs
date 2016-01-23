@@ -11,9 +11,9 @@ namespace Baybak.TextReader
 {
   public partial class frmComments : Form
   {
-    private string _fileName;
+    private string _file_name;
 
-    public frmMain _main_form;
+    public frmTranslator _main_form;
     public frmComments()
     {
       InitializeComponent();
@@ -22,7 +22,7 @@ namespace Baybak.TextReader
 
     private void _editor_OnWordSelected(string word)
     {
-      this.Text = word;
+    //  this.Text = word;
       RunManager.Manager.Speek(word);
       _main_form._show_translation_result(word);
 
@@ -38,6 +38,7 @@ namespace Baybak.TextReader
 
     private void _saveFile()
     {
+      _editor.Save();
     }
     protected override void OnClosed(EventArgs e)
     {
@@ -47,7 +48,8 @@ namespace Baybak.TextReader
     }
     public void LoadFromFile( string file)
     {
-      this.Text = file;
+      this.Text = _file_name = file;
+
       _editor.LoadFromFile(file);
     }
   }
