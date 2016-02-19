@@ -157,6 +157,7 @@
     <Content Include="aemuller.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="TODO.txt" />
     <EmbeddedResource Include="html\tr.html">
       <SubType>Designer</SubType>
     </EmbeddedResource>
