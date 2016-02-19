@@ -270,7 +270,7 @@ namespace Baybak.TextReader
       }
 
     }
-   // frmComments _commentsForm;
+    // frmComments _commentsForm;
     public void _openFile(string file)
     {
       _save_all();
@@ -278,10 +278,10 @@ namespace Baybak.TextReader
       this.splitContainer2.SplitterDistance = this.Width / 2;
 
       string ext = System.IO.Path.GetExtension(file).ToLower();
-      
+
       _commentFileName = file.ToLower().Replace(ext, ".ww" + ext);
 
-     if (System.IO.File.Exists(_commentFileName))
+      if (System.IO.File.Exists(_commentFileName))
       {
         _textContent.Text = System.IO.File.ReadAllText(_commentFileName, Encoding.UTF8);
       }
@@ -289,15 +289,19 @@ namespace Baybak.TextReader
       {
         _textContent.Text = DateTime.Now.ToLongDateString();
       }
-     if (ext == ".txt" || ext == ".muse")
-     {
-       textViewer1.SetText(System.IO.File.ReadAllText(file, Encoding.UTF8));
-       this.Text = _broker.CurrentBook.Title + " / " + System.IO.Path.GetFileName(_broker.CurrentBook.FileName);
-     }
-     else
-     {
-       RunManager.Manager.RunApplication(file);
-     }
+      this.Text = _broker.CurrentBook.Title + " / " + System.IO.Path.GetFileName(_broker.CurrentBook.FileName);
+      if (ext == ".txt" || ext == ".muse")
+      {
+        textViewer1.SetText(System.IO.File.ReadAllText(file, Encoding.UTF8));
+        //this.Text = _broker.CurrentBook.Title + " / " + System.IO.Path.GetFileName(_broker.CurrentBook.FileName);
+      }
+      else
+      {
+        textViewer1.SetText(this.Text);
+        RunManager.Manager.RunApplication(file);
+      }
+
+
     }
     public void _editFileInfo(string file)
     {
