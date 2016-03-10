@@ -45,7 +45,7 @@ namespace Baybak.TextReader
               text += " " + lines[i];
             }
             onword(text);
-            i++;
+            i++;  
           }
         }
         else

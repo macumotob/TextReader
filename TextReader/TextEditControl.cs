@@ -27,8 +27,9 @@ namespace Baybak.TextReader
     int _mouse_x = 0, _mouse_y = 0;
     bool _word_is_selected = false;
 
-    Font _font = new Font("Lucida Console", 14);
-
+    //Font _font = new Font("Lucida Console", 14);
+    //Font _font = new Font("Times New Roman", 16);
+    Font _font = new Font("Tahoma", 12);
     List<string> _words = new List<string>();
     List<float> _widths = new List<float>();
 
@@ -102,7 +103,7 @@ namespace Baybak.TextReader
     {
       get
       {
-        //return StringFormat.GenericTypographic;
+        return StringFormat.GenericTypographic;
         if (this._stringFormat == null)
         {
           this._stringFormat = new StringFormat(StringFormatFlags.NoWrap);

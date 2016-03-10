@@ -66,6 +66,7 @@
       this._webBrowser = new System.Windows.Forms.WebBrowser();
       this.toolStrip2 = new System.Windows.Forms.ToolStrip();
       this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+      this._txtEditable = new Baybak.TextReader.TextEditControl();
       this.textViewer1 = new Baybak.TextReader.TextViewer();
       ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
       this.splitContainer2.Panel1.SuspendLayout();
@@ -94,6 +95,7 @@
       // 
       // splitContainer2.Panel1
       // 
+      this.splitContainer2.Panel1.Controls.Add(this._txtEditable);
       this.splitContainer2.Panel1.Controls.Add(this.textViewer1);
       this.splitContainer2.Panel1.Controls.Add(this.toolStrip1);
       this.splitContainer2.Panel1.Controls.Add(this.menuStrip1);
@@ -101,8 +103,8 @@
       // splitContainer2.Panel2
       // 
       this.splitContainer2.Panel2.Controls.Add(this.splitContainer3);
-      this.splitContainer2.Size = new System.Drawing.Size(846, 283);
-      this.splitContainer2.SplitterDistance = 489;
+      this.splitContainer2.Size = new System.Drawing.Size(930, 469);
+      this.splitContainer2.SplitterDistance = 537;
       this.splitContainer2.TabIndex = 7;
       // 
       // toolStrip1
@@ -128,7 +130,7 @@
             this._commandPageDown});
       this.toolStrip1.Location = new System.Drawing.Point(0, 24);
       this.toolStrip1.Name = "toolStrip1";
-      this.toolStrip1.Size = new System.Drawing.Size(489, 25);
+      this.toolStrip1.Size = new System.Drawing.Size(537, 25);
       this.toolStrip1.TabIndex = 14;
       this.toolStrip1.Text = "toolStrip1";
       // 
@@ -311,7 +313,7 @@
             this.dictionaryToolStripMenuItem});
       this.menuStrip1.Location = new System.Drawing.Point(0, 0);
       this.menuStrip1.Name = "menuStrip1";
-      this.menuStrip1.Size = new System.Drawing.Size(489, 24);
+      this.menuStrip1.Size = new System.Drawing.Size(537, 24);
       this.menuStrip1.TabIndex = 10;
       this.menuStrip1.Text = "menuStrip1";
       // 
@@ -406,8 +408,8 @@
       // splitContainer3.Panel2
       // 
       this.splitContainer3.Panel2.Controls.Add(this._webBrowser);
-      this.splitContainer3.Size = new System.Drawing.Size(353, 283);
-      this.splitContainer3.SplitterDistance = 130;
+      this.splitContainer3.Size = new System.Drawing.Size(389, 469);
+      this.splitContainer3.SplitterDistance = 215;
       this.splitContainer3.TabIndex = 2;
       // 
       // _textContent
@@ -419,7 +421,7 @@
       this._textContent.Multiline = true;
       this._textContent.Name = "_textContent";
       this._textContent.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-      this._textContent.Size = new System.Drawing.Size(353, 130);
+      this._textContent.Size = new System.Drawing.Size(389, 215);
       this._textContent.TabIndex = 2;
       // 
       // _webBrowser
@@ -428,7 +430,7 @@
       this._webBrowser.Location = new System.Drawing.Point(0, 0);
       this._webBrowser.MinimumSize = new System.Drawing.Size(20, 20);
       this._webBrowser.Name = "_webBrowser";
-      this._webBrowser.Size = new System.Drawing.Size(353, 149);
+      this._webBrowser.Size = new System.Drawing.Size(389, 250);
       this._webBrowser.TabIndex = 0;
       // 
       // toolStrip2
@@ -437,7 +439,7 @@
             this.toolStripButton1});
       this.toolStrip2.Location = new System.Drawing.Point(0, 0);
       this.toolStrip2.Name = "toolStrip2";
-      this.toolStrip2.Size = new System.Drawing.Size(846, 25);
+      this.toolStrip2.Size = new System.Drawing.Size(930, 25);
       this.toolStrip2.TabIndex = 8;
       this.toolStrip2.Text = "toolStrip2";
       // 
@@ -451,11 +453,24 @@
       this.toolStripButton1.Text = "_commandHistory";
       this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
       // 
+      // _txtEditable
+      // 
+      this._txtEditable.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+      this._txtEditable.BackColor = System.Drawing.Color.LightGoldenrodYellow;
+      this._txtEditable.Font = new System.Drawing.Font("Times New Roman", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this._txtEditable.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+      this._txtEditable.Location = new System.Drawing.Point(4, 270);
+      this._txtEditable.Margin = new System.Windows.Forms.Padding(4);
+      this._txtEditable.Name = "_txtEditable";
+      this._txtEditable.Size = new System.Drawing.Size(529, 199);
+      this._txtEditable.TabIndex = 16;
+      // 
       // textViewer1
       // 
       this.textViewer1._Helper = null;
-      this.textViewer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+      this.textViewer1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
       this.textViewer1.BackColor = System.Drawing.Color.LightGoldenrodYellow;
       this.textViewer1.Font = new System.Drawing.Font("Times New Roman", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -463,14 +478,14 @@
       this.textViewer1.Location = new System.Drawing.Point(4, 48);
       this.textViewer1.Margin = new System.Windows.Forms.Padding(4);
       this.textViewer1.Name = "textViewer1";
-      this.textViewer1.Size = new System.Drawing.Size(481, 229);
+      this.textViewer1.Size = new System.Drawing.Size(529, 214);
       this.textViewer1.TabIndex = 15;
       // 
       // frmMain
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(846, 318);
+      this.ClientSize = new System.Drawing.Size(930, 504);
       this.Controls.Add(this.toolStrip2);
       this.Controls.Add(this.splitContainer2);
       this.DoubleBuffered = true;
@@ -540,6 +555,6 @@
     private System.Windows.Forms.ToolStripMenuItem _commandHist;
     private System.Windows.Forms.ToolStrip toolStrip2;
     private System.Windows.Forms.ToolStripButton toolStripButton1;
-
+    private TextEditControl _txtEditable;
   }
 }
