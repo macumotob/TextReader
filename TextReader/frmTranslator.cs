@@ -118,6 +118,7 @@ namespace Baybak.TextReader
       //_links.LoadFromFile(Application.StartupPath + "\\links.data");
       //_browser.Navigate("http://kinogo.co/5712-shtamm-2-sezon.html");
       //_browser.Navigate("file://E:/github/TextReader/TextReader/html/canvas.html");
+      _browser.Navigate("http://192.168.0.46:14094/books/%D0%94%D0%B5%D1%82%D1%81%D0%BA%D0%B8%D0%B5/ivan.html");
       base.OnShown(e);
     }
     void _browser_Navigating(object sender, WebBrowserNavigatingEventArgs e)

@@ -36,8 +36,14 @@ namespace Baybak.TextReader
       _webBrowser.ObjectForScripting = this;
       //_ToolBarG._AddHandler("Book", _OpenBook2Read);
       //  _ToolBarG._AddHandler("Edit", _EditCurrentBook);
+      _txtEditable.OnWordSelected += _txtEditable_OnWordSelected;
       RunManager.OnException += Manager_OnException;
    }
+
+    private void _txtEditable_OnWordSelected(string word)
+    {
+      _webBrowser.Navigate("www.maxbuk.com/php/tr.php");
+    }
 
     private void Manager_OnException(Exception e)
     {
@@ -284,6 +290,7 @@ namespace Baybak.TextReader
       if (System.IO.File.Exists(_commentFileName))
       {
         _textContent.Text = System.IO.File.ReadAllText(_commentFileName, Encoding.UTF8);
+        
       }
       else
       {
@@ -293,6 +300,7 @@ namespace Baybak.TextReader
       if (ext == ".txt" || ext == ".muse")
       {
         textViewer1.SetText(System.IO.File.ReadAllText(file, Encoding.UTF8));
+        _txtEditable.LoadFromFile(file);
         //this.Text = _broker.CurrentBook.Title + " / " + System.IO.Path.GetFileName(_broker.CurrentBook.FileName);
       }
       else

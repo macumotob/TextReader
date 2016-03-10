@@ -17,8 +17,8 @@ namespace Baybak.TextReader
  //     TestVoices();
  //     return;
   //    LoadMuller();
-//      GutenbergBooks();
-//      return;
+      //GutenbergBooks();
+      //return;
 
       //_Statments();
       //return;
@@ -113,9 +113,8 @@ namespace Baybak.TextReader
     }
     static void GutenbergBooks()
     {
-      string gutenfolder = //@"K:\Library\Gutenberg\";
-      @"C:\ww\DownLoads\";
-      string[] folders = { "7\\", "9\\" };
+      string gutenfolder = @"E:\Books\gutenberg\";
+      string[] folders = { "24\\", "29\\" };
       string infofile = gutenfolder + "gutenberg.txt";
       using (System.IO.StreamWriter sw = new System.IO.StreamWriter(infofile))
       {
