@@ -39,10 +39,11 @@ namespace Baybak.TextReader
       _txtEditable.OnWordSelected += _txtEditable_OnWordSelected;
       RunManager.OnException += Manager_OnException;
    }
-
+    System.Speech.Synthesis.SpeechSynthesizer _speecher = new System.Speech.Synthesis.SpeechSynthesizer();
     private void _txtEditable_OnWordSelected(string word)
     {
-      _webBrowser.Navigate("www.maxbuk.com/php/tr.php");
+      _webBrowser.Navigate("www.maxbuk.com/php/tr.php?word="+word);
+      _speecher.Speak(word);
     }
 
     private void Manager_OnException(Exception e)
@@ -201,8 +202,8 @@ namespace Baybak.TextReader
       {
         _openFile(_broker.CurrentBook.FileName);
       }
-      _frm_translator = new frmTranslator();
-      _frm_translator.Show(this);
+    //  _frm_translator = new frmTranslator();
+    //  _frm_translator.Show(this);
       base.OnShown(e);
     }
 

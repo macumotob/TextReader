@@ -29,7 +29,9 @@ namespace Baybak.TextReader
 
     //Font _font = new Font("Lucida Console", 14);
     //Font _font = new Font("Times New Roman", 16);
-    Font _font = new Font("Tahoma", 12);
+    int _font_size = 18;
+    Font _font = new Font("Georgia", 18);
+
     List<string> _words = new List<string>();
     List<float> _widths = new List<float>();
 
@@ -103,7 +105,7 @@ namespace Baybak.TextReader
     {
       get
       {
-        return StringFormat.GenericTypographic;
+        //return StringFormat.GenericTypographic;
         if (this._stringFormat == null)
         {
           this._stringFormat = new StringFormat(StringFormatFlags.NoWrap);
@@ -210,6 +212,18 @@ namespace Baybak.TextReader
         _firstVisibleIndex = _findFirstChar(_topLine);
         this.Invalidate();
 
+      }
+      if(e.Control && e.KeyCode == Keys.Add)
+      {
+        _font_size++;
+        _font = new Font("Georgia", _font_size);
+        this.Invalidate();
+      }
+      if (e.Control && e.KeyCode == Keys.Subtract)
+      {
+        _font_size--;
+        _font = new Font("Georgia", _font_size);
+        this.Invalidate();
       }
       base.OnKeyDown(e);
     }
