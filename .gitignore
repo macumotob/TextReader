@@ -1,4 +1,8 @@
 TextReader/obj/
 TextReader/bin/
+<<<<<<< HEAD
 Bin/SS.GoogleTranslation.dll
+=======
+Bin/TextReader.exe.config
+>>>>>>> 23ec185b44e27ccd3d296f38cc854041ad7de6bd
 Bin/
