@@ -105,19 +105,22 @@ namespace Baybak.TextReader
     {
       get
       {
-        //return StringFormat.GenericTypographic;
-        if (this._stringFormat == null)
+        return StringFormat.GenericDefault;// .GenericTypographic;
+        if (_string_format == null)
         {
-          this._stringFormat = new StringFormat(StringFormatFlags.NoWrap);
+          _string_format = new StringFormat(StringFormatFlags.NoWrap);
 
-          this._stringFormat.LineAlignment = StringAlignment.Near;
-          this._stringFormat.Alignment = StringAlignment.Near;
-           this._stringFormat.Trimming = StringTrimming.Word;
+          _string_format.LineAlignment = StringAlignment.Near;
+          _string_format.Alignment = StringAlignment.Near;
+          _string_format.Trimming = StringTrimming.None;
+          // _StringFormat.Trimming = StringTrimming.None;
+          _string_format.FormatFlags = StringFormatFlags.MeasureTrailingSpaces | StringFormatFlags.NoWrap;
+
         }
-        return this._stringFormat;
+        return _string_format;
       }
     }
-    StringFormat _stringFormat = StringFormat.GenericTypographic;
+    StringFormat _string_format = StringFormat.GenericTypographic;
     //private void _DrawWord(Graphics g, Brush brush, ref int x, int y, string word)
     //{
     //  g.DrawString(word, this.Font, brush, x, y, this._StringFormat);
@@ -265,7 +268,7 @@ namespace Baybak.TextReader
       
       float x = 0;
       float y = _lineNumber * _lineHeight;
-      g.DrawString((_topLine + _lineNumber).ToString(), _font, Brushes.Black, x, y + 7, _stringFormat);
+      g.DrawString((_topLine + _lineNumber).ToString(), _font, Brushes.Black, x, y + 7, _StringFormat);
       _lineNumber++;
     }
     bool _isWhite(char c)
@@ -296,7 +299,7 @@ namespace Baybak.TextReader
     SizeF _wordSize;
     SizeF _getWordSize(Graphics g,string s)
     {
-      _wordSize  = g.MeasureString(s, _font, 1000, _stringFormat);
+      _wordSize  = g.MeasureString(s, _font, 1000, _StringFormat);
       return _wordSize;
     }
     private void _get_line_words(Graphics g,ref int i, float width)
@@ -360,9 +363,9 @@ namespace Baybak.TextReader
     
     protected override void OnPaint(PaintEventArgs e)
     {
-      _stringFormat.Trimming = StringTrimming.None;
-      _stringFormat.FormatFlags = StringFormatFlags.MeasureTrailingSpaces | StringFormatFlags.NoWrap;
-      e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
+     // _StringFormat.Trimming = StringTrimming.None;
+    //  _StringFormat.FormatFlags = StringFormatFlags.MeasureTrailingSpaces | StringFormatFlags.NoWrap;
+    //  e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
 
 
       Graphics g = e.Graphics;
@@ -372,7 +375,7 @@ namespace Baybak.TextReader
       _lineNumber = 0;
       _lines_per_page = 0;
 
-      SizeF size = g.MeasureString("W", _font, 100, _stringFormat);
+      SizeF size = g.MeasureString("W", _font, 100, _StringFormat);
 
       float leftMargin = 100,rightMargin = 50;
       _lineHeight = size.Height;
@@ -408,7 +411,7 @@ namespace Baybak.TextReader
           }
 
           x = leftMargin + _widths[n++];
-          g.DrawString(word, _font, brush, x, y, _stringFormat);
+          g.DrawString(word, _font, brush, x, y, _StringFormat);
          // g.DrawLine(Pens.Gray, x, y, x, y + _lineHeight);
         }
       }
