@@ -17,7 +17,7 @@ namespace Baybak.TextReader
     public frmComments()
     {
       InitializeComponent();
-      _editor.OnWordSelected += _editor_OnWordSelected;
+      
     }
 
     private void _editor_OnWordSelected(string word)
@@ -38,7 +38,7 @@ namespace Baybak.TextReader
 
     private void _saveFile()
     {
-      _editor.Save();
+      
     }
     protected override void OnClosed(EventArgs e)
     {
@@ -50,7 +50,6 @@ namespace Baybak.TextReader
     {
       this.Text = _file_name = file;
 
-      _editor.LoadFromFile(file);
     }
   }
 }
