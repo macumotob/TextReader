@@ -390,7 +390,8 @@ namespace Baybak.TextReader
 
       _get_line_words(g, ref i, e.ClipRectangle.Width - rightMargin - leftMargin);
 
-      if (i >= _text.Length) return;
+      if (i >= _text.Length-1)
+        return;
 
       _draw_line_number(g);
    

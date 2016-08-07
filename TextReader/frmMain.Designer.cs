@@ -31,6 +31,8 @@
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
       this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
       this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+      this._txtEditable = new Baybak.TextReader.TextEditControl();
+      this.textViewer1 = new Baybak.TextReader.TextViewer();
       this.toolStrip1 = new System.Windows.Forms.ToolStrip();
       this._commandMode = new System.Windows.Forms.ToolStripButton();
       this._commandGoogle = new System.Windows.Forms.ToolStripButton();
@@ -66,8 +68,7 @@
       this._webBrowser = new System.Windows.Forms.WebBrowser();
       this.toolStrip2 = new System.Windows.Forms.ToolStrip();
       this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
-      this._txtEditable = new Baybak.TextReader.TextEditControl();
-      this.textViewer1 = new Baybak.TextReader.TextViewer();
+      this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
       ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
       this.splitContainer2.Panel1.SuspendLayout();
       this.splitContainer2.Panel2.SuspendLayout();
@@ -106,6 +107,34 @@
       this.splitContainer2.Size = new System.Drawing.Size(930, 469);
       this.splitContainer2.SplitterDistance = 537;
       this.splitContainer2.TabIndex = 7;
+      // 
+      // _txtEditable
+      // 
+      this._txtEditable.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+      this._txtEditable.BackColor = System.Drawing.Color.LightGoldenrodYellow;
+      this._txtEditable.Font = new System.Drawing.Font("Times New Roman", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this._txtEditable.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+      this._txtEditable.Location = new System.Drawing.Point(4, 270);
+      this._txtEditable.Margin = new System.Windows.Forms.Padding(4);
+      this._txtEditable.Name = "_txtEditable";
+      this._txtEditable.Size = new System.Drawing.Size(529, 199);
+      this._txtEditable.TabIndex = 16;
+      // 
+      // textViewer1
+      // 
+      this.textViewer1._Helper = null;
+      this.textViewer1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+      this.textViewer1.BackColor = System.Drawing.Color.LightGoldenrodYellow;
+      this.textViewer1.Font = new System.Drawing.Font("Times New Roman", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.textViewer1.LeftBorder = 40;
+      this.textViewer1.Location = new System.Drawing.Point(4, 48);
+      this.textViewer1.Margin = new System.Windows.Forms.Padding(4);
+      this.textViewer1.Name = "textViewer1";
+      this.textViewer1.Size = new System.Drawing.Size(529, 214);
+      this.textViewer1.TabIndex = 15;
       // 
       // toolStrip1
       // 
@@ -436,7 +465,8 @@
       // toolStrip2
       // 
       this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton1});
+            this.toolStripButton1,
+            this.toolStripButton2});
       this.toolStrip2.Location = new System.Drawing.Point(0, 0);
       this.toolStrip2.Name = "toolStrip2";
       this.toolStrip2.Size = new System.Drawing.Size(930, 25);
@@ -453,33 +483,14 @@
       this.toolStripButton1.Text = "_commandHistory";
       this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
       // 
-      // _txtEditable
+      // toolStripButton2
       // 
-      this._txtEditable.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-      this._txtEditable.BackColor = System.Drawing.Color.LightGoldenrodYellow;
-      this._txtEditable.Font = new System.Drawing.Font("Times New Roman", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this._txtEditable.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-      this._txtEditable.Location = new System.Drawing.Point(4, 270);
-      this._txtEditable.Margin = new System.Windows.Forms.Padding(4);
-      this._txtEditable.Name = "_txtEditable";
-      this._txtEditable.Size = new System.Drawing.Size(529, 199);
-      this._txtEditable.TabIndex = 16;
-      // 
-      // textViewer1
-      // 
-      this.textViewer1._Helper = null;
-      this.textViewer1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-      this.textViewer1.BackColor = System.Drawing.Color.LightGoldenrodYellow;
-      this.textViewer1.Font = new System.Drawing.Font("Times New Roman", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-      this.textViewer1.LeftBorder = 40;
-      this.textViewer1.Location = new System.Drawing.Point(4, 48);
-      this.textViewer1.Margin = new System.Windows.Forms.Padding(4);
-      this.textViewer1.Name = "textViewer1";
-      this.textViewer1.Size = new System.Drawing.Size(529, 214);
-      this.textViewer1.TabIndex = 15;
+      this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+      this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
+      this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
+      this.toolStripButton2.Name = "toolStripButton2";
+      this.toolStripButton2.Size = new System.Drawing.Size(23, 22);
+      this.toolStripButton2.Text = "toolStripButton2";
       // 
       // frmMain
       // 
@@ -556,5 +567,6 @@
     private System.Windows.Forms.ToolStrip toolStrip2;
     private System.Windows.Forms.ToolStripButton toolStripButton1;
     private TextEditControl _txtEditable;
+    private System.Windows.Forms.ToolStripButton toolStripButton2;
   }
 }
